@@ -306,10 +306,15 @@ body.is-locked { overflow: hidden; }
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.3s var(--ease-out);
 }
 
-.lightbox.is-open { opacity: 1; }
+.lightbox.is-open { opacity: 1; pointer-events: auto; }
+
+/* Without this the author `display: flex` beats the browser's own
+   [hidden] rule and the closed overlay silently swallows every tap. */
+.lightbox[hidden] { display: none; }
 
 .lb-stage {
   position: relative;
@@ -319,7 +324,7 @@ body.is-locked { overflow: hidden; }
   align-items: center;
   justify-content: center;
   padding: 3.4rem 1rem;
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
 }
 
 .lb-img {

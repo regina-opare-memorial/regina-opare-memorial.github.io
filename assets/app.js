@@ -54,18 +54,29 @@
   let openState = false;
   let fromHistory = false;
 
+  function reveal() {
+    lbImg.classList.add('is-shown');
+    skeleton.style.opacity = '0';
+  }
+
   function paint(n) {
     current = n;
-    lbImg.classList.remove('is-shown');
-    skeleton.style.opacity = '';
-    lbImg.src = pageSrc(n);
     lbImg.alt = `Brochure page ${n} of ${TOTAL_PAGES}`;
     lbCount.textContent = `${n} / ${TOTAL_PAGES}`;
+    const src = pageSrc(n);
+    /* Re-assigning an identical src fires no `load` event, which would leave the
+       image stuck at opacity 0 — so reuse whatever is already on screen. */
+    if (lbImg.getAttribute('src') === src && lbImg.complete && lbImg.naturalWidth > 0) {
+      reveal();
+      return;
+    }
+    lbImg.classList.remove('is-shown');
+    skeleton.style.opacity = '';
+    lbImg.src = src;
   }
 
   lbImg.addEventListener('load', () => {
-    lbImg.classList.add('is-shown');
-    skeleton.style.opacity = '0';
+    reveal();
     if (current > 1) new Image().src = pageSrc(current - 1);
     if (current < TOTAL_PAGES) new Image().src = pageSrc(current + 1);
   });
@@ -129,12 +140,23 @@
 
   let startX = 0;
   let startY = 0;
+  let pinching = false;
+
   stage.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 1) {
+      pinching = true;
+      return;
+    }
     startX = e.changedTouches[0].clientX;
     startY = e.changedTouches[0].clientY;
   }, { passive: true });
 
   stage.addEventListener('touchend', (e) => {
+    if (pinching) {
+      if (e.touches.length === 0) pinching = false;
+      return;
+    }
+    if (e.changedTouches.length !== 1) return;
     const dx = e.changedTouches[0].clientX - startX;
     const dy = e.changedTouches[0].clientY - startY;
     if (Math.abs(dx) < 55 || Math.abs(dy) > Math.abs(dx)) return;
