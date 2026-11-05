@@ -60,13 +60,21 @@ body.is-locked { overflow: hidden; }
   color: var(--ink);
 }
 
+.maiden {
+  margin: 1.05rem 0 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
 .dates {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  margin: 1.15rem 0 0;
+  margin: 0.35rem 0 0;
   font-size: 0.94rem;
   letter-spacing: 0.03em;
   color: var(--ink-soft);
