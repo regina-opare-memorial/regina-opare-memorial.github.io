@@ -1,0 +1,12 @@
+# Print-resolution master — not published (79 MB)
+source/
+
+# Packaged fallback for drag-and-drop hosting
+site-for-upload.zip
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.psd
+*.ai
